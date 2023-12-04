@@ -18,18 +18,8 @@ const getScore = (
   if (
     coordDiffs.some(([rowDelta, colDelta]) => {
       const char = lines[rowIndex + rowDelta]?.[colIndex + colDelta];
-      // console.log("looking at char", char);
-      // console.log(
-      //   "looking at [",
-      //   rowIndex + rowDelta,
-      //   ",",
-      //   colIndex + colDelta,
-      //   "]",
-      //   trailingNum
-      // );
       if (char && char !== "." && isNaN(Number(char))) {
         // its a symbol so number is a keeper
-        console.log("found a symbol", trailingNum, rowIndex, colIndex, char);
         return true;
       }
       return false;
@@ -39,19 +29,8 @@ const getScore = (
         lines[rowIndex + rowDelta]?.[
           colIndex + colDelta - (trailingNum.length - 1)
         ];
-      // console.log(
-      //   "char: ",
-      //   char,
-      //   "looking at [",
-      //   rowIndex + rowDelta,
-      //   ",",
-      //   colIndex + colDelta - (trailingNum.length - 1),
-      //   "]",
-      //   trailingNum
-      // );
-      // console.log("looking at char", char);
+
       if (char && char !== "." && isNaN(Number(char))) {
-        // console.log("found a symbol", trailingNum, rowIndex, colIndex, char);
         // its a symbol so number is a keeper
         return true;
       }
@@ -59,8 +38,6 @@ const getScore = (
     })
   ) {
     return Number(trailingNum);
-  } else {
-    // console.log("did not find a symbol for", trailingNum, rowIndex, colIndex);
   }
   return 0;
 };
