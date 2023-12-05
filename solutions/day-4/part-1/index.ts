@@ -1,9 +1,4 @@
 const solve = (lines: string[]) => {
-  const maxes = [
-    [" red", 12],
-    [" green", 13],
-    [" blue", 14],
-  ] as [string, number][];
   const result = lines.reduce((sum, line) => {
     const [gameId, games] = line.split(": ");
     const [winning, picked] = games
