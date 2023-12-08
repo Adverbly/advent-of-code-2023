@@ -38,27 +38,6 @@ export class Solver {
       this.detectCycleLength(nodeId)
     );
     return lcmList(cycleLengths);
-    // while (true) {
-    //   let nonZCount = 0;
-    //   this.nodeIds = this.nodeIds.map((nodeId) => {
-    //     const nextId =
-    //       this.nodes[nodeId][this.dirs[this.dirIndex % this.dirs.length]];
-    //     if (nextId[2] !== "Z") {
-    //       nonZCount++;
-    //     }
-    //     return nextId;
-    //   });
-
-    //   this.dirIndex++;
-    //   this.visited++;
-
-    //   if (nonZCount === 0) {
-    //     return this.visited;
-    //   } else if (nonZCount < 3) {
-    //     console.log(nonZCount, this.visited);
-    //     // console.log(this.visited);
-    //   }
-    // }
   }
 
   parseLines(lines: string[]) {
