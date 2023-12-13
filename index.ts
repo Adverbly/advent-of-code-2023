@@ -16,7 +16,7 @@ To develop, use bun --watch index.ts [...]`
   exit(128);
 };
 
-if (![4, 5].includes(argv.length)) {
+if (![4, 5].includes(argv.length) && !Bun.env.AOC_DAY) {
   exitHelp();
 }
 
@@ -30,7 +30,9 @@ const dayDir = (resolver: TargetResolution) =>
   `/solutions/day-${resolver.day}/`;
 
 const importSolver = async (resolver: TargetResolution) =>
-  import(`.${dayDir(resolver)}part-${resolver.part}/Solver.ts`);
+  import(
+    `${import.meta.dir}${dayDir(resolver)}part-${resolver.part}/Solver.ts`
+  );
 
 const getFileLines = async (resolver: TargetResolution) => {
   const inputFile = Bun.file(
@@ -61,7 +63,7 @@ const solve = async (resolver: TargetResolution) => {
 
 // yay for top-level await!
 await solve({
-  day: Number(argv[2]) || exitHelp(),
-  part: Number(argv[3]) || exitHelp(),
-  example: argv[4] ?? "input.txt",
+  day: Number(argv[2] || Bun.env.AOC_DAY) || exitHelp(),
+  part: Number(argv[3] || Bun.env.AOC_PART) || exitHelp(),
+  example: argv[4] ?? Bun.env.AOC_INPUT ?? "input.txt",
 });
