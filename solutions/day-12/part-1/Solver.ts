@@ -56,11 +56,7 @@ export class Solver {
 
   solve() {
     return this.lines.reduce((sum, line, index) => {
-      // console.log(line);
       const permutations = this.permutations(line);
-      if (permutations > 100) {
-        console.log(index, permutations, line.raw, line.rawSeq);
-      }
       // console.log(permutations);
 
       return sum + permutations;
