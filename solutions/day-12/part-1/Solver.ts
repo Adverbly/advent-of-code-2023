@@ -1,13 +1,3 @@
-type Line = {
-  line: string;
-  comp: ["#" | "?", number][];
-  chars: string[];
-  raw: string;
-  rawSeq: number[];
-  seq: number[];
-  seqWeight: number;
-};
-
 class PartialLine {
   raw: string;
   rawSeq: any;
@@ -48,8 +38,6 @@ export class Solver {
         (chippedDot ? this.permutations(chippedDot) : 0) +
         (chippedHash ? this.permutations(chippedHash) : 0)
       );
-    } else {
-      // console.log(chars, line.rawSeq);
     }
     return 1;
   }
@@ -57,7 +45,6 @@ export class Solver {
   solve() {
     return this.lines.reduce((sum, line, index) => {
       const permutations = this.permutations(line);
-      // console.log(permutations);
 
       return sum + permutations;
     }, 0);
@@ -130,16 +117,12 @@ export class Solver {
       let partialLine = new PartialLine(raw, rawSeq);
 
       partialLine = this.chip(partialLine) as PartialLine;
-      // console.log(partialLine);
 
       partialLine.reverse();
-      // console.log(partialLine);
 
       partialLine = this.chip(partialLine) as PartialLine;
-      // console.log(partialLine);
 
       partialLine.reverse();
-      // console.log(partialLine);
 
       return partialLine;
     });
