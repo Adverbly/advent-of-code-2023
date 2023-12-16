@@ -11,20 +11,19 @@ type Beam = {
 export class Solver {
   grid!: string[][];
   nodes: Record<string, Node> = {};
-  energized: Set<string> = new Set();
   seenBeamStates: Set<string> = new Set();
 
   constructor(lines: string[]) {
     this.parseLines(lines);
   }
 
-  printEnergized() {
+  printEnergized(energized: Set<string>) {
     console.log(
       this.grid
         .map((row, rowIndex) =>
           row
             .map((col, colIndex) =>
-              this.energized.has(this.seenKey([rowIndex, colIndex])) ? "#" : "."
+              energized.has(this.seenKey([rowIndex, colIndex])) ? "#" : "."
             )
             .join("")
         )
@@ -44,11 +43,11 @@ export class Solver {
     });
   }
 
-  solve() {
-    let beams: Beam[] = [{ rowCol: [0, 0], dir: "d" }];
-    this.energized.add(this.seenKey(beams[0].rowCol));
+  solveInitial(beam: Beam) {
+    let beams: Beam[] = [beam];
+    const energized: Set<string> = new Set();
+    energized.add(this.seenKey(beams[0].rowCol));
     while (beams.length > 0) {
-      this.printEnergized();
       const nextBeams = beams.flatMap((beam): Beam[] => {
         let nextRowCol: RowCol = [0, 0];
         if (beam.dir === "r") {
@@ -70,7 +69,7 @@ export class Solver {
         }
 
         const nextChar = this.grid[nextRowCol[0]][nextRowCol[1]];
-        this.energized.add(this.seenKey(nextRowCol));
+        energized.add(this.seenKey(nextRowCol));
 
         if (nextChar === ".") {
           return this.newBeams([{ dir: beam.dir, rowCol: nextRowCol }]);
@@ -117,16 +116,39 @@ export class Solver {
       });
 
       beams = nextBeams;
-      // if (beams.length !== nextBeams.length || !this.seenStates.has(state)) {
-      //   this.seenStates.add(state);
-      //   beams = nextBeams;
-      // } else {
-      //   beams = [];
-      // }
     }
 
-    return this.energized.size;
-    // return this.grid.map((a) => a.join("")).join("\n");
+    return energized.size;
+  }
+
+  solve() {
+    let maxEnergized = 0;
+    const mergeMax = ({ dir, rowCol }: Beam) => {
+      maxEnergized = Math.max(
+        maxEnergized,
+        this.solveInitial({
+          dir,
+          rowCol,
+        })
+      );
+    };
+    for (let rowIndex = 0; rowIndex < this.grid.length; rowIndex++) {
+      const rowCol = [rowIndex, -1] as RowCol;
+      mergeMax({ dir: "r", rowCol });
+    }
+    for (let rowIndex = 0; rowIndex < this.grid.length; rowIndex++) {
+      const rowCol = [rowIndex, this.grid[0].length] as RowCol;
+      mergeMax({ dir: "l", rowCol });
+    }
+    for (let colIndex = 0; colIndex < this.grid[0].length; colIndex++) {
+      const rowCol = [-1, colIndex] as RowCol;
+      mergeMax({ dir: "d", rowCol });
+    }
+    for (let colIndex = 0; colIndex < this.grid[0].length; colIndex++) {
+      const rowCol = [this.grid.length, colIndex] as RowCol;
+      mergeMax({ dir: "u", rowCol });
+    }
+    return maxEnergized;
   }
 
   seenKey(rowCol: RowCol) {
