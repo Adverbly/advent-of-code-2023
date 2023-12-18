@@ -1,18 +1,10 @@
-type RowCol = [number, number];
-type Node = {
-  rowIndex: number;
-  colIndex: number;
-};
+import { sortedIndexOf } from "../../../lib/sortedIndexOf.ts";
 
 export class Solver {
   grid!: number[][];
 
   constructor(lines: string[]) {
     this.parseLines(lines);
-  }
-
-  score(string: string[]) {
-    return 0;
   }
 
   adjChain(chain: string, char: "d" | "u" | "l" | "r") {
@@ -25,16 +17,12 @@ export class Solver {
     let seen = new Set<string>();
     while (!foundCost) {
       const { rowCol, cost, chain, path } = horizon.shift()!;
-      // console.log(rowCol, cost, chain);
-      // if (seen.size % 10 === 0) {
-      //   console.log(horizon, seen);
-      // }
+
       if (
         rowCol[0] === this.grid.length - 1 &&
         rowCol[1] === this.grid[0].length - 1
       ) {
         foundCost = cost;
-        console.log(path);
         continue;
       }
 
@@ -47,13 +35,21 @@ export class Solver {
         (chain.length >= 4 || chain[0] === "d" || chain.length === 0) &&
         !chain.includes("u")
       ) {
-        horizon.push({
+        const newNode = {
           rowCol: adj,
           cost: cost + this.grid[adj[0]]?.[adj[1]],
           chain: adjChain,
           path: path.concat([adj]),
-        });
+        };
         seen.add(adjSeen);
+        if (newNode.cost) {
+          const insertIndex = sortedIndexOf(
+            horizon,
+            (node) => node.cost,
+            newNode
+          );
+          horizon.splice(insertIndex, 0, newNode);
+        }
       }
       adj = [rowCol[0] - 1, rowCol[1]];
       adjChain = this.adjChain(chain, "u");
@@ -64,13 +60,21 @@ export class Solver {
         (chain.length >= 4 || chain[0] === "u" || chain.length === 0) &&
         !chain.includes("d")
       ) {
-        horizon.push({
+        const newNode = {
           rowCol: adj,
           cost: cost + this.grid[adj[0]]?.[adj[1]],
           chain: adjChain,
           path: path.concat([adj]),
-        });
+        };
         seen.add(adjSeen);
+        if (newNode.cost) {
+          const insertIndex = sortedIndexOf(
+            horizon,
+            (node) => node.cost,
+            newNode
+          );
+          horizon.splice(insertIndex, 0, newNode);
+        }
       }
       adj = [rowCol[0], rowCol[1] + 1];
       adjChain = this.adjChain(chain, "r");
@@ -81,13 +85,21 @@ export class Solver {
         (chain.length >= 4 || chain[0] === "r" || chain.length === 0) &&
         !chain.includes("l")
       ) {
-        horizon.push({
+        const newNode = {
           rowCol: adj,
           cost: cost + this.grid[adj[0]]?.[adj[1]],
           chain: adjChain,
           path: path.concat([adj]),
-        });
+        };
         seen.add(adjSeen);
+        if (newNode.cost) {
+          const insertIndex = sortedIndexOf(
+            horizon,
+            (node) => node.cost,
+            newNode
+          );
+          horizon.splice(insertIndex, 0, newNode);
+        }
       }
       adj = [rowCol[0], rowCol[1] - 1];
       adjChain = this.adjChain(chain, "l");
@@ -98,31 +110,22 @@ export class Solver {
         (chain.length >= 4 || chain[0] === "l" || chain.length === 0) &&
         !chain.includes("r")
       ) {
-        horizon.push({
+        const newNode = {
           rowCol: adj,
           cost: cost + this.grid[adj[0]]?.[adj[1]],
           chain: adjChain,
           path: path.concat([adj]),
-        });
+        };
+        if (newNode.cost) {
+          const insertIndex = sortedIndexOf(
+            horizon,
+            (node) => node.cost,
+            newNode
+          );
+          horizon.splice(insertIndex, 0, newNode);
+        }
         seen.add(adjSeen);
       }
-      horizon = horizon
-        .filter((h) => h.cost !== undefined && !isNaN(h.cost))
-        .sort((a, b) => a.cost - b.cost);
-
-      // if(rowCol[0] + 1 >= this.grid.length) {
-      //   continue;
-      // } else if(rowCol[0] - 1 <= 0) {
-      //   continue;
-      // } else if(rowCol[1] - 1 <= 0) {
-      //   continue
-      // } else if(rowCol[1] + 1 >= this.grid[0].length) {
-      //   continue
-      // }
-
-      // const horizonAdj = next?.rowCol
-
-      //       horizon = horizon.flatMap(([rowIndex, colIndex]) => {
     }
     return foundCost;
   }
