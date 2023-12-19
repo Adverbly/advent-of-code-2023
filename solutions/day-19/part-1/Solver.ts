@@ -30,8 +30,6 @@ export class Solver {
   }
 
   workflowAcceptsPart(workflow: Workflow, part: Part): boolean {
-    console.log(workflow);
-
     const pointer =
       workflow.rules.find(({ comparison, field, type }) => {
         const partValue = part[field];
