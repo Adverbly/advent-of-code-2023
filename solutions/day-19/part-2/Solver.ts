@@ -16,11 +16,13 @@ type Rule = {
   field: keyof Part;
   ruleId: RuleId;
 };
+
 type Workflow = {
   rules: Rule[];
   ifFalse: Pointer;
   workflowId: WorkflowId;
 };
+
 type WorkflowChain = { workflow: Workflow; ruleId: RuleId | null }[];
 
 export class Solver {
@@ -28,11 +30,11 @@ export class Solver {
   workflowsById: Record<WorkflowId, Workflow> = {};
   rulesById: Record<RuleId, Rule> = {};
   rootWorkflowId = "in";
-  workflowA = {
+  workflowA: Workflow = {
     ifFalse: "A",
     workflowId: "A",
     rules: [],
-  } as Workflow;
+  };
 
   constructor(lines: string[]) {
     this.parseLines(lines);
