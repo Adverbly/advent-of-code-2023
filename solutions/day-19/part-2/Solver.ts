@@ -69,7 +69,7 @@ export class Solver {
         ]);
       }
 
-      tailWorkflow.rules.forEach((rule, index) => {
+      tailWorkflow.rules.forEach((rule) => {
         const nextWorkflow = this.workflowsById[rule.ifTrue];
         if (rule.ifTrue === "A") {
           results.push([

@@ -31,8 +31,10 @@ export class Solver {
 
   adjCell(mid: RowCol, diff: RowCol): Adj | null {
     const rowCol = [mid[0] + diff[0], mid[1] + diff[1]] as RowCol;
-    const value = this.grid[rowCol[0]]?.[rowCol[1]];
-    if (value === undefined) return null;
+    const value =
+      this.grid[rowCol[0] % this.grid.length]?.[
+        rowCol[1] % this.grid[0].length
+      ];
     return {
       rowCol,
       value,
@@ -79,7 +81,7 @@ export class Solver {
     const parity = (this.start[0] + this.start[1]) % 2;
 
     let counter = 0;
-    while (horizon.length > 0 && counter !== 64) {
+    while (horizon.length > 0 && counter !== 26501365) {
       const nextHorizon: RowCol[] = [];
       while (horizon.length > 0) {
         const rowCol = horizon.shift()!;

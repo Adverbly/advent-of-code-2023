@@ -33,6 +33,12 @@ export class Solver {
   lowPulseCount: number = 0;
   highPulseCount: number = 0;
   buttonPressCount: number = 0;
+  detectedPeriods = {
+    ch: null,
+    gh: null,
+    th: null,
+    sv: null,
+  };
 
   constructor(lines: string[]) {
     this.parseLines(lines);
