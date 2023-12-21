@@ -106,24 +106,11 @@ export class Solver {
   solve() {
     const target = this.width === 131 ? 26501365 : 5000;
     const firstStep = target % this.width;
-    // const stepBys = [
-    //   6, 4, 40, 50,
-    //   // 400,
-    //   // 500,
-    //   // 4000,
-    // ];
 
     const stepBys = [
       firstStep,
       this.width * 2,
       this.width * 2,
-      // this.width * 2,
-      // this.width * 2,
-      // this.width * 2,
-      // this.width * 2,
-      // this.width * 2,
-      // this.width * 2,
-      // this.width * 2,
       // this.width * 2,
       // this.width * 2,
       // this.width * 2,
@@ -139,29 +126,6 @@ export class Solver {
         (totalSteps % 2) as any,
         stepBys.length * 4 + 2
       );
-      // console.log(
-      //   `{${totalSteps},${gridCounts.reduce(
-      //     (sum, row) => sum + row.reduce((rowSum, col) => col + rowSum, 0),
-      //     0
-      //   )}}`
-      // );
-      // {{65,3889},{327,95591},{589,309181},{851,644659},{1113,1102025},{1375,1681279}}
-      // console.log(
-      //   "totalSteps: ",
-      //   totalSteps,
-      //   " results: ",
-      //   gridCounts.reduce(
-      //     (sum, row) => sum + row.reduce((rowSum, col) => col + rowSum, 0),
-      //     0
-      //   )
-      // );
-
-      // console.log(
-      //   gridCounts
-      //     .map((row) => row.map((c) => c.toString().padStart(6, " ")).join(""))
-      //     .join("\n")
-      // );
-      // console.log();
       gridCountViews.push(gridCounts);
     });
 
